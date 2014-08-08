@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:postgresql/postgresql.dart';
 import 'package:mime/mime.dart';
 import 'package:http_server/http_server.dart';
+import 'dart:convert' show JSON;
 
 main() {
 
@@ -33,8 +34,16 @@ main() {
                 if (HttpMultipartFormData.parse(multipart)
                     .contentDisposition.parameters["name"] == "to-do-input") {
 
-                  print(value);
-                  // TODO
+                  if (conn != null) {
+                    conn.execute("INSERT INTO tasklist (task) VALUES ('$value')").then((_) {
+
+                      req.response.add(JSON.encode({"task":[value]}).codeUnits);
+                      req.response.close();
+                    }, onError: (_) {
+                      req.response.close();
+                    });
+                  }
+
                 }
               });
             });
@@ -42,8 +51,17 @@ main() {
 
           case "/getRecords":
             if (conn != null) {
-              conn.query('select task from tasklist').toList().then((list) {
-                print(list);
+              Map<String, List<String>> ret = {};
+              ret["task"] = [];
+              conn.query('select task from tasklist').toList().then((List<Row> list) {
+
+                list.forEach((Row row) {
+                  row.forEach((_, value) {
+                    ret["task"].add(value);
+                  });
+                });
+                req.response.add(JSON.encode(ret).codeUnits);
+                req.response.close();
               });
             }
             break;
