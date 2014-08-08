@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>WebAppTaskList</title>
+    <link rel="stylesheet" href="webapptasklist.css">
+  </head>
+  <body>
+    <h1>WebAppTaskList</h1>
+
+    <div>
+      <form id="myForm" action="/send">
+        <label><input type="text" name="to-do-input"  id= "to-do-input"></label>
+        <input type="Submit" value="Submit" >
+      </form>
+
+    </div>
+
+    <ul id="to-do-list">
+
+    </ul>
+
+    <script type="application/dart" src="webapptasklist.dart"></script>
+    <script src="packages/browser/dart.js"></script>
+  </body>
+</html>
