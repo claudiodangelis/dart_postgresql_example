@@ -54,6 +54,16 @@ main() {
       if (file.existsSync()) {
         // Il file esiste quindi lo apriamo in lettura e ne inoltriamo il
         // contenuto come responso della richiesta
+        if (path.endsWith(".html")) {
+          req.response.headers.add("Content-Type", "text/html");
+        } else if (path.endsWith(".dart")) {
+          req.response.headers.add("Content-Type", "application/dart");
+        } else if (path.endsWith(".js")) {
+          req.response.headers.add("Content-Type", "text/javascript");
+        } else if (path.endsWith(".css")) {
+          req.response.headers.add("Content-Type", "text/css");
+        }
+
         file.openRead().pipe(req.response);
       } else {
 
